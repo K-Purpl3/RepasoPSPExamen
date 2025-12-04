@@ -6,39 +6,44 @@ import java.io.InputStreamReader;
 
 public class Ej_1 {
     static void main(String[] args) {
-        try{
-            // 1. Obtenemos la instancia de Runtime
+        try {
+            // 1. Obtener la instancia de Runtime
             Runtime runtime = Runtime.getRuntime();
 
-            // 2. Para obtener la fecha en windows / ubuntu
+            // 2. Elegir comando según sistema operativo
             String comando;
-            if (System.getProperty("os.name").startsWith("Windows")){
-                comando = "powershell.exe Get-Date";
-            }else {
-                comando = "date";
+
+            if (System.getProperty("os.name").startsWith("Windows")) {
+                comando = "powershell.exe Get-Date"; // Windows
+            } else {
+                comando = "date";                     // Linux/Mac
             }
+
+            // 3. Ejecutamos el comando
             Process process = runtime.exec(comando);
 
-            // 3. Capturar la salida estandar
-            System.out.println("Salida del comando "+comando+":");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String linea;
+            // 4. Capturamos la salida del comando (stdout)
+            System.out.println("Salida del comando " + comando + ":");
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream())
+            );
 
-            while ((linea = reader.readLine()) != null){
+            String linea;
+            while ((linea = reader.readLine()) != null) {
                 System.out.println(linea);
             }
 
-            // 4. Esparar a que termine el proceso
+            // 5. Esperamos a que el proceso acabe y verificamos el resultado
             int codSalida = process.waitFor();
-            if (codSalida == 0){
+            if (codSalida == 0) {
                 System.out.println("\nComando ejecutado correctamente");
-            }else {
-                System.err.println("\nError en la ejecucion del comando. Código de error: "+codSalida);
+            } else {
+                System.err.println("\nError al ejecutar. Código: " + codSalida);
             }
 
             reader.close();
 
-        }catch (IOException | InterruptedException e){
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }

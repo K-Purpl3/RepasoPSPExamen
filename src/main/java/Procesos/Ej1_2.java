@@ -7,37 +7,45 @@ public class Ej1_2 {
         try {
             File file = new File("resultado_ping.txt");
 
-            // 1. Crear una instancia de Proceses builder, separamos el comando de los argumentos
-            ProcessBuilder builder = new ProcessBuilder("ping","-n","4","127.0.0.1");
+            // 1. Crear ProcessBuilder indicando comando y argumentos por separado.
+            //    "ping -n 4 127.0.0.1"
+            ProcessBuilder builder = new ProcessBuilder(
+                    "ping", "-n", "4", "127.0.0.1"
+            );
 
-            // 2. Redirigimos la salida a un archivo, es importante antes de iniciar el proceso dejarlo configurado
-            if (file.exists()){
-                builder.redirectOutput(ProcessBuilder.Redirect.appendTo(file)); //Permitimos que si el achivo existe se escriba en la lina de abajo
-            }else {
+            // 2. Redirigir la salida estándar del proceso a un archivo.
+            //    IMPORTANTE: debe configurarse ANTES de ejecutar start()
+            if (file.exists()) {
+                // Si ya existe -> añadimos al final
+                builder.redirectOutput(ProcessBuilder.Redirect.appendTo(file));
+            } else {
+                // Si no existe -> lo creamos
                 builder.redirectOutput(file);
             }
 
-            // 3. Iniciar el proceso. Esto devuelve un objeto Process
+            // 3. Iniciar el proceso y obtener el objeto Process
             System.out.println("Ejecutando ping ...");
-            Process process = builder.start(); // Le pasamos al process el objeto process del processBuilder
+            Process process = builder.start();
 
-            // 4. Caputarmos el código de salida
+            // 4. Esperamos a que termine y capturamos código de salida
             int codSalida = process.waitFor();
-            if (codSalida == 0){
-                System.out.println("Ejecución correcta de el programa");
-            }else {
-                System.err.println("Error de ejecución. Código de error: "+codSalida);
+            if (codSalida == 0) {
+                System.out.println("Ejecución correcta del programa");
+            } else {
+                System.err.println("Error en la ejecución. Código: " + codSalida);
             }
 
-            BufferedReader reader = new BufferedReader(new FileReader(file)); // Usamos FileReader para leer los archivos
+            // 5. Leemos el archivo generado por el comando ping
+            BufferedReader reader = new BufferedReader(new FileReader(file));
             String line;
-            while ( (line = reader.readLine()) != null ) {
-                System.out.println(line);
+
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line); // mostramos cada línea
             }
 
-            //Cerramos el reader al terminar
             reader.close();
-        }catch (IOException | InterruptedException e){
+
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }

@@ -1,19 +1,24 @@
 package Sincronizacion;
 
 public class Contador {
-    private int val = 0;
+    private int val = 0;   // Variable compartida entre muchos hilos
 
-    //Al no poner la synchronized los hilos acceden de forma desordenada a la variable val, haciendo que el resultado no sea el esperado
-    public void incrementar(){
-        val ++;
+    // ❌ Método SIN sincronizar
+    // Varios hilos pueden entrar a la vez y modificar 'val' al mismo tiempo.
+    // Esto provoca condiciones de carrera -> resultados incorrectos.
+    public void incrementar() {
+        val++;
     }
 
-    //Sincronizamos el acceso a la variable val, de manera que no se pisan los hilos
-    public synchronized void incrementarSinc(){
-        val ++;
+    // ✔️ Método sincronizado
+    // Solo un hilo puede ejecutar este método al mismo tiempo.
+    // Garantiza consistencia del valor.
+    public synchronized void incrementarSinc() {
+        val++;
     }
 
-    public int getVal(){
+    // Método para obtener el valor final
+    public int getVal() {
         return val;
     }
 }

@@ -7,36 +7,43 @@ import java.util.List;
 
 public class Ej_1_3 {
     static void main(String[] args) {
+
+        // Carpeta base donde buscaremos subdirectorios
         File file = new File("C:\\Users");
 
-        //Comprobamos que user existe
-        if (!file.exists()){
+        // Comprobamos que exista
+        if (!file.exists()) {
             System.err.println("No existe");
+            return;
         }
 
-        // Creamos una lista de proceseos
+        // Lista para almacenar todos los procesos lanzados
         List<Process> process = new ArrayList<>();
 
-        for (File file2 : file.listFiles()){
-            ProcessBuilder processBuilder;
+        // Recorremos todos los archivos dentro de C:\Users
+        for (File file2 : file.listFiles()) {
 
-            processBuilder = new ProcessBuilder("cmd","/c","dir",file2.getAbsolutePath());
-
+            // ProcessBuilder para ejecutar "cmd /c dir <ruta>"
+            ProcessBuilder processBuilder =
+                    new ProcessBuilder("cmd", "/c", "dir", file2.getAbsolutePath());
 
             try {
-                //Lanzar proceso
+                // Lanzamos el proceso
                 Process p = processBuilder.start();
                 process.add(p);
-                System.out.println("Lanzar proceso para: "+file2.getName());
-            }catch (IOException e){
+
+                System.out.println("Lanzado proceso para: " + file2.getName());
+
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
-        for (Process p : process){
+        // Esperamos a que todos los procesos finalicen
+        for (Process p : process) {
             try {
                 p.waitFor();
-            }catch (InterruptedException e){
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }

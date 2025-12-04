@@ -3,24 +3,27 @@ package Hilos;
 public class Ej2_2 {
     static void main(String[] args) {
 
-         //Creamos lo 3 hilos
+        // Creamos 3 hilos con diferente tiempo de espera
         Thread hiloMax = new Trabajador(785);
         Thread hiloMid = new Trabajador(982);
         Thread hiloMin = new Trabajador(1368);
 
+        // Les ponemos nombres descriptivos
         hiloMax.setName("Hilo max");
         hiloMid.setName("Hilo medio");
         hiloMin.setName("Hilo min");
 
-        //Configuramos las prioridades
-        hiloMax.setPriority(Thread.MAX_PRIORITY);
-        hiloMid.setPriority(Thread.NORM_PRIORITY);
-        hiloMin.setPriority(Thread.MIN_PRIORITY);
+        // Establecemos prioridades (máximo, normal, mínimo)
+        hiloMax.setPriority(Thread.MAX_PRIORITY);   // valor 10
+        hiloMid.setPriority(Thread.NORM_PRIORITY);  // valor 5
+        hiloMin.setPriority(Thread.MIN_PRIORITY);   // valor 1
 
-        //Ejecutar las tareas
+        // Iniciamos los hilos
         hiloMax.start();
         hiloMid.start();
         hiloMin.start();
 
+        // NOTA IMPORTANTE:
+        // La prioridad influye, pero NO garantiza el orden de ejecución.
     }
 }
